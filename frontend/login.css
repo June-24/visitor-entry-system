@@ -1,0 +1,81 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    background-image: url('hereitcomes.png');
+    background-size: cover;
+}
+
+.container {
+    width: 350px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.role-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.role-btn {
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    background: lightgray;
+    transition: 0.3s;
+}
+
+.role-btn.active {
+    background: #007bff;
+    color: white;
+}
+
+.form-container {
+    text-align: left;
+}
+
+h2 {
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#toggle-form {
+    text-align: center;
+    margin-top: 10px;
+}
+
+#toggle-btn {
+    color: #007bff;
+    cursor: pointer;
+}
