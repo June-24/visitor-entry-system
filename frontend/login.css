@@ -5,17 +5,45 @@
     font-family: Arial, sans-serif;
 }
 
-body {
-    display: flex;
+/* Style the header */
+header {
+    width: 100%;
+    background-color: #343a40; 
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-    background-image: url('hereitcomes.png');
-    background-size: cover;
+    padding: 20px 20px 20px 20px;
+    position: relative; /* Keeps it in normal flow */
 }
 
+/* Style images inside header */
+.top-container {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    gap: 10px;
+    height: 100px;
+}
+
+.top-image {
+    height: 100px;
+    border-radius: 10px;
+    justify-content: left;
+    align-items: left;
+
+}
+
+/* Reset body styling */
+body {
+    background-color: #f4f4f4;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;  /* Stack elements vertically */
+    align-items: center;
+}
+
+/* Ensure form appears below header */
 .container {
+    margin-top: 30px; /* Space between header and form */
     width: 350px;
     background: white;
     padding: 20px;
@@ -28,6 +56,9 @@ body {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    border-radius: 5px;
+
+
 }
 
 .role-btn {

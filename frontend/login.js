@@ -18,6 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateForm() {
         formTitle.innerText = isLogin ? `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} Login` : `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} Register`;
         inputFields.innerHTML = roleInputs[userRole] + (isLogin ? '' : '<input type="password" id="confirmPassword" placeholder="Confirm Password" required>');
+        
+
+
     }
 
     roleButtons.forEach(btn => {

@@ -1,17 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userRole = localStorage.getItem("userType");
     const userId = localStorage.getItem("userId");
+    const phoneRegex = /^[0-9]{10}$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
     document.querySelector(".alert-box button").addEventListener("click", closeAlert);
 
-    document.getElementById("user-role").innerText = userRole ? `Role: ${userRole}` : "Unknown Role";
-    document.getElementById("user-id").innerText = userId ? `(${userId})` : "";
+    document.getElementById("user-role").innerText = userRole ? `Role: ${userRole} ` : "Unknown Role";
+    document.getElementById("user-id").innerText = userId ? ` (${userId})` : "";
 
     const visitorTypeSelect = document.getElementById("visitor-type");
     const visitorCountContainer = document.getElementById("count-container");
     const visitorCountSelect = document.getElementById("visitor-count");
     const visitorDetailsContainer = document.getElementById("visitor-details-container");
 
-    // Logout functionality
     document.getElementById("logout-btn").addEventListener("click", function () {
         localStorage.removeItem("token");
         localStorage.removeItem("userType");
@@ -19,23 +20,21 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "login.html";
     });
 
-    // Populate dropdown based on user role
     if (userRole === "student") {
         visitorTypeSelect.innerHTML = `<option value="nil">--</option><option value="parents">Parents</option>`;
     } else if (userRole === "professor") {
         visitorTypeSelect.innerHTML = `
             <option value="nil">--</option>
             <option value="parents">Parents</option>
-            <option value="friends">Friends</option>
+            <option value="friends">Guests</option>
             <option value="bulk">Bulk</option>
         `;
     }
 
-    // Handle visitor type selection
     visitorTypeSelect.addEventListener("change", function () {
         const selectedType = visitorTypeSelect.value;
-        visitorDetailsContainer.innerHTML = ""; // Clear previous inputs
-        visitorCountSelect.innerHTML = ""; // Clear previous count options
+        visitorDetailsContainer.innerHTML = "";
+        visitorCountSelect.innerHTML = "";
 
         if (selectedType === "nil") {
             visitorCountContainer.style.display = "none";
@@ -48,15 +47,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Populate visitor count based on role and type
     function populateVisitorCountOptions(type) {
-        visitorCountSelect.innerHTML = ""; // Clear old options
+        visitorCountSelect.innerHTML = "";
 
         let maxCount = 1;
         if (userRole === "student") {
             maxCount = 2;
-        } else if (userRole === "professor" && (type === "parents" || type === "friends")) {
-            maxCount = 5;
+        } else if (userRole === "professor" && type === "parents") {
+            maxCount = 2;
+        } else if (userRole === "professor" && type === "friends") {
+            maxCount = 15;
         }
 
         for (let i = 1; i <= maxCount; i++) {
@@ -66,16 +66,15 @@ document.addEventListener("DOMContentLoaded", function () {
             visitorCountSelect.appendChild(option);
         }
 
-        generateVisitorForms(1); // Default to 1 form initially
+        generateVisitorForms(1);
     }
 
-    // Handle visitor count selection
     visitorCountSelect.addEventListener("change", function () {
         generateVisitorForms(visitorCountSelect.value);
     });
 
     function generateVisitorForms(count) {
-        visitorDetailsContainer.innerHTML = ""; // Clear previous forms
+        visitorDetailsContainer.innerHTML = "";
 
         for (let i = 0; i < count; i++) {
             const visitorForm = document.createElement("div");
@@ -117,76 +116,123 @@ document.addEventListener("DOMContentLoaded", function () {
             <input type="text" id="bulk-purpose" placeholder="Enter purpose (optional)">
         `;
     }
-});
 
-function closeAlert() {
-    document.getElementById("custom-alert").classList.remove("show-alert");
-}
-
-function showAlert(message) {
-    document.getElementById("alert-message").innerText = message;
-    document.getElementById("custom-alert").classList.add("show-alert");
-}
-
-document.getElementById("submit-btn").addEventListener("click", function () {
-    const userRole = localStorage.getItem("userType");
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-
-    const visitorType = document.getElementById("visitor-type").value;
-    let visitors = [];
-
-    if (visitorType === "bulk") {
-        // Bulk entry
-        visitors.push({
-            type: "bulk",
-            count: document.getElementById("bulk-count").value,
-            institute: document.getElementById("bulk-institute").value,
-            phone: document.getElementById("bulk-phone").value,
-            email: document.getElementById("bulk-email").value,
-            purpose: document.getElementById("bulk-purpose").value || null
-        });
-    } else {
-        // Individual visitor entries
-        const visitorCards = document.querySelectorAll(".visitor-card");
-        visitorCards.forEach(card => {
-            visitors.push({
-                type: visitorType,
-                name: card.querySelector(".visitor-name").value,
-                phone: card.querySelector(".visitor-phone").value,
-                govId: card.querySelector(".visitor-id").value,
-                email: card.querySelector(".visitor-email").value
-            });
-        });
+    function closeAlert() {
+        document.getElementById("custom-alert").classList.remove("show-alert");
     }
 
-    const payload = {
-        userRole,
-        userId,
-        token,
-        visitorType,
-        visitors
-    };
+    function showAlert(message) {
+        document.getElementById("alert-message").innerText = message;
+        document.getElementById("custom-alert").classList.add("show-alert");
+    }
 
-    // Send data to backend
-    fetch("http://localhost:5000/submit-visitor", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showAlert("Visitor entry submitted successfully! They will be mailed the QR code.");
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    document.getElementById("submit-btn").addEventListener("click", function () {
+        const userRole = localStorage.getItem("userType");
+        const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("token");
+
+        const visitorType = document.getElementById("visitor-type").value;
+        let visitors = [];
+
+        if (visitorType === "bulk") {
+            const bulkCount = document.getElementById("bulk-count").value.trim();
+            const bulkInstitute = document.getElementById("bulk-institute").value.trim();
+            const bulkPhone = document.getElementById("bulk-phone").value.trim();
+            const bulkEmail = document.getElementById("bulk-email").value.trim();
+            
+            if (!bulkCount || !bulkInstitute || !bulkPhone || !bulkEmail) {
+                showAlert("All bulk visitor fields must be filled.");
+                return;
+            }
+
+            if (!validateEmail(bulkEmail)) {
+                showAlert("Invalid email format.");
+                return;
+            }
+            if (!phoneRegex.test(bulkPhone)) {
+                showAlert("Enter a valid 10-digit phone number.");
+                return;
+            }
+
+            visitors.push({
+                type: "bulk",
+                count: bulkCount,
+                institute: bulkInstitute,
+                phone: bulkPhone,
+                email: bulkEmail,
+                purpose: document.getElementById("bulk-purpose").value.trim() || null
+            });
         } else {
-            showAlert("Failed to submit. Try again.");
+            const visitorCards = document.querySelectorAll(".visitor-card");
+            for (let card of visitorCards) {
+                const name = card.querySelector(".visitor-name").value.trim();
+                const phone = card.querySelector(".visitor-phone").value.trim();
+                const govId = card.querySelector(".visitor-id").value.trim();
+                const email = card.querySelector(".visitor-email").value.trim();
+
+                if (!name || !phone || !govId || !email) {
+                    showAlert("All visitor details are required.");
+                    return;
+                }
+
+                if (!validateEmail(email)) {
+                    showAlert("Invalid email format.");
+                    return;
+                }
+                if (!nameRegex.test(name)) {
+                    valid = false;
+                    showAlert("Name should contain only alphabets.");
+                    return;
+                }
+                if (!phoneRegex.test(phone)) {
+                    valid = false;
+                    showAlert("Enter a valid 10-digit phone number.");
+                    return;
+                }
+
+                visitors.push({
+                    type: visitorType,
+                    name,
+                    phone,
+                    govId,
+                    email
+                });
+            }
         }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        showAlert("An error occurred while submitting.");
+
+        const payload = {
+            userRole,
+            userId,
+            token,
+            visitorType,
+            visitors
+        };
+
+        fetch("http://localhost:5000/submit-visitor", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert("Visitor entry submitted successfully! They will be mailed the QR code.");
+            } else {
+                showAlert("Failed to submit. Try again.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showAlert("An error occurred while submitting.");
+        });
     });
 });
+
