@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 
 const authRouter = require('./routes/auth');
 const visitorRouter = require('./routes/visitor');
+const admit = require('./routes/admit');
+
 
 dotenv.config();
 const app = express();
@@ -29,6 +31,7 @@ connectDB();
 
 app.use('/', authRouter);
 app.use('/', visitorRouter);
+app.use('/', admit);
 
 
-app.listen(5000, () => console.log('Server running on port 5000'));
+app.listen(5000, '0.0.0.0', () => console.log('Server running on port 5000'));

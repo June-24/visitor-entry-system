@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         visitorTypeSelect.innerHTML = `
             <option value="nil">--</option>
             <option value="parents">Parents</option>
-            <option value="friends">Guests</option>
+            <option value="guests">Guests</option>
             <option value="bulk">Bulk</option>
         `;
     }
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
             maxCount = 2;
         } else if (userRole === "professor" && type === "parents") {
             maxCount = 2;
-        } else if (userRole === "professor" && type === "friends") {
+        } else if (userRole === "professor" && type === "guests") {
             maxCount = 15;
         }
 
@@ -92,6 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <label>Email:</label>
                 <input type="email" class="visitor-email" placeholder="Enter email" required>
+                
+                <label>Purpose:</label>
+                <input type="text" class="visitor-purpose" placeholder="Enter purpose">
             `;
 
             visitorDetailsContainer.appendChild(visitorForm);
@@ -100,6 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function generateBulkForm() {
         visitorDetailsContainer.innerHTML = `
+            
+
             <label>Number of Visitors:</label>
             <input type="number" id="bulk-count" placeholder="Enter count" required>
 
@@ -108,7 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             <label>Contact Person Phone:</label>
             <input type="text" id="bulk-phone" placeholder="Enter phone number" required>
-
+            <label>Government ID:</label>
+            <input type="text" id="bulk-id" placeholder="Enter ID" required>
             <label>Contact Person Email:</label>
             <input type="email" id="bulk-email" placeholder="Enter email" required>
 
@@ -144,8 +150,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const bulkInstitute = document.getElementById("bulk-institute").value.trim();
             const bulkPhone = document.getElementById("bulk-phone").value.trim();
             const bulkEmail = document.getElementById("bulk-email").value.trim();
+            const bulkID = document.getElementById("bulk-id").value.trim();
             
-            if (!bulkCount || !bulkInstitute || !bulkPhone || !bulkEmail) {
+            if (!bulkCount || !bulkInstitute || !bulkPhone || !bulkEmail || !bulkID) {
                 showAlert("All bulk visitor fields must be filled.");
                 return;
             }
@@ -161,10 +168,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             visitors.push({
                 type: "bulk",
-                count: bulkCount,
-                institute: bulkInstitute,
+                quantity: bulkCount,
+                name: bulkInstitute,
                 phone: bulkPhone,
                 email: bulkEmail,
+                govID: bulkID,
                 purpose: document.getElementById("bulk-purpose").value.trim() || null
             });
         } else {
@@ -172,10 +180,10 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let card of visitorCards) {
                 const name = card.querySelector(".visitor-name").value.trim();
                 const phone = card.querySelector(".visitor-phone").value.trim();
-                const govId = card.querySelector(".visitor-id").value.trim();
+                const govID = card.querySelector(".visitor-id").value.trim();
                 const email = card.querySelector(".visitor-email").value.trim();
 
-                if (!name || !phone || !govId || !email) {
+                if (!name || !phone || !govID || !email) {
                     showAlert("All visitor details are required.");
                     return;
                 }
@@ -199,8 +207,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     type: visitorType,
                     name,
                     phone,
-                    govId,
-                    email
+                    govID,
+                    email,
+                    quantity:1,
+                    purpose: card.querySelector(".visitor-purpose").value.trim() || null
+
                 });
             }
         }
