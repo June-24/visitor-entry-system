@@ -1,4 +1,4 @@
-const ip = "http://43.204.142.131:5000";
+const ip = "http://43.204.142.131";
 
 document.addEventListener("DOMContentLoaded", () => {
     const roleButtons = document.querySelectorAll(".role-btn");
