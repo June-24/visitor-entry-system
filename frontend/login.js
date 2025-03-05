@@ -1,3 +1,5 @@
+const ip = "http://43.204.142.131:5000";
+
 document.addEventListener("DOMContentLoaded", () => {
     const roleButtons = document.querySelectorAll(".role-btn");
     const formTitle = document.getElementById("form-title");
@@ -59,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isLogin) data.confirmPassword = document.getElementById("confirmPassword").value;
 
         const endpoint = isLogin ? "/login" : "/register";
-        const response = await fetch(`http://localhost:5000${endpoint}`, {
+        const response = await fetch(`${ip}${endpoint}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
