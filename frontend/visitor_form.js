@@ -226,25 +226,25 @@ document.addEventListener("DOMContentLoaded", function () {
             visitors
         };
 
-    // Send data to backend
-    fetch(`${ip}/submit-visitor`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showAlert("Visitor entry submitted successfully! They will be mailed the QR code.");
-        } else {
-            showAlert("Failed to submit. Try again.");
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        showAlert("An error occurred while submitting.");
+        fetch(`${ip}/submit-visitor`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert("Visitor entry submitted successfully! They will be mailed the QR code.");
+            } else {
+                showAlert("Failed to submit. Try again.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showAlert("An error occurred while submitting.");
+        });
     });
 });
