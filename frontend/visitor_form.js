@@ -1,4 +1,4 @@
-const ip = "http://43.204.142.131";
+const ip = "http://43.204.142.131/api";
 
 document.addEventListener("DOMContentLoaded", function () {
     const userRole = localStorage.getItem("userType");
