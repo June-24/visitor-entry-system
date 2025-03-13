@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="alert.css">
+</head>
+<body>
+    <header>
+        <div class="top-container">
+            <img src="NITW.png" alt="Image 1" class="top-image">
+            <img src="erp.png" alt="Image 2" class="top-image">
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="role-selector">
+            <button class="role-btn active" data-role="student">Student</button>
+            <button class="role-btn" data-role="professor">Professor</button>
+            <button class="role-btn" data-role="admin">Admin</button>
+        </div>
+
+        <div class="form-container">
+            <h2 id="form-title">Student Login</h2>
+            <form id="auth-form">
+                <div id="input-fields">
+                    <!-- Dynamic Inputs Rendered Here -->
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+            <p id="toggle-form">Don't have an account? <span id="toggle-btn">Register</span></p>
+        </div>
+    </div>
+
+    <!-- Alert Box -->
+    <div class="alert-overlay" id="custom-alert">
+        <div class="alert-box">
+            <p id="alert-message">This is an alert message!</p>
+            <button onclick="closeAlert()">OK</button>
+        </div>
+    </div>
+
+    
+
+    <script src="login.js"></script>
+</body>
+</html>

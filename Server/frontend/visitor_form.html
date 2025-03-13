@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Form</title>
+    <link rel="stylesheet" href="visitor_form.css">
+    <link rel="stylesheet" href="alert.css">
+</head>
+<body>
+    <header>
+        <div class="top-container">
+            <img src="NITW.png" alt="Image 1" class="top-image">
+            <img src="erp.png" alt="Image 2" class="top-image">
+        </div>
+    </header>
+    <header>
+        <div class="user-info">
+            <span id="user-role"></span>
+            <span id="user-id"></span>
+        </div>
+        
+        <div class="logout"><button id="logout-btn">Logout</button></div>
+    </header>
+
+    <div class="container">
+        <div class="visitor-form">
+            <h2>Visitor Entry</h2>
+
+            <label for="visitor-type">Select Visitor Type:</label>
+            <select id="visitor-type">
+                <!-- Options will be added dynamically -->
+            </select>
+
+            <div id="count-container" style="display: none;">
+                <label for="visitor-count">Number of Visitors:</label>
+                <select id="visitor-count">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+
+            <div id="visitor-details-container"></div>
+
+            <button id="submit-btn">Submit</button>
+        </div>
+    </div>
+
+
+    <!-- html for alert box -->
+    <div class="alert-overlay" id="custom-alert">
+        <div class="alert-box">
+            <p id="alert-message">This is an alert message!</p>
+            <button onclick="closeAlert()">OK</button>
+        </div>
+    </div>
+    
+
+    <script src="visitor_form.js"></script>
+</body>
+</html>
